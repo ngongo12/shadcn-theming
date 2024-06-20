@@ -18,6 +18,16 @@ module.exports = {
     "^@/components/ui/(.*)$",
     "^@/components/(.*)$",
     "^@/styles/(.*)$",
+
+    "^@/shared-core/types/(.*)$",
+    "^@/shared-core/config/(.*)$",
+    "^@/shared-core/lib/(.*)$",
+    "^@/shared-core/hooks/(.*)$",
+    "^@/shared-core/components/ui/(.*)$",
+    "^@/shared-core/components/(.*)$",
+    "^@/shared-core/styles/(.*)$",
+    "^@/shared-core/*/(.*)$",
+    //
     "^@/app/(.*)$",
     "",
     "^[./]",
