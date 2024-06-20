@@ -2,10 +2,8 @@ import "@/shared-core/styles/globals.css"
 import { Metadata } from "next"
 import { SiteHeader } from "@/shared-core/components/site-header"
 import { TailwindIndicator } from "@/shared-core/components/tailwind-indicator"
-import { ThemeProvider } from "@/shared-core/components/theme-provider"
 import { siteConfig } from "@/shared-core/config/site"
-import { fontSans } from "@/shared-core/lib/fonts"
-import { cn } from "@/shared-core/lib/utils"
+import MainProvider from "@/shared-core/provider/main-provider"
 
 export const metadata: Metadata = {
   title: {
@@ -31,23 +29,9 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-            </div>
-            <TailwindIndicator />
-          </ThemeProvider>
-        </body>
-      </html>
+      <MainProvider>
+        <div className="flex-1">{children}</div>
+      </MainProvider>
     </>
   )
 }
