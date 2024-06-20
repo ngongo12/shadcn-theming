@@ -1,15 +1,16 @@
 "use client"
+
 import Link from "next/link"
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '@/tailwind.config'
-import { siteConfig } from "@/config/site"
-import { buttonVariants, Button } from "@/components/ui/button"
-import useThemes from '@/themes/useThemes'
+import { Button, buttonVariants } from "@/shared-core/components/ui/button"
+import { siteConfig } from "@/shared-core/config/site"
+import useThemes from "@/shared-core/themes/useThemes"
+import tailwindConfig from "@/tailwind.config"
+import resolveConfig from "tailwindcss/resolveConfig"
 
 const resolvedConfig = resolveConfig(tailwindConfig)
 
 export default function IndexPage() {
-  const {handleSetTheme} = useThemes()
+  const { handleSetTheme } = useThemes()
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
@@ -39,12 +40,15 @@ export default function IndexPage() {
         >
           GitHub
         </Link>
-        <Button className='animate-in zoom-in duration-200' variant='secondary'>Secondary</Button>
-        <Button variant='ghost'>Ghost</Button>
-        <Button variant='ghost'
-          onClick={() => handleSetTheme({}, 'test')}
-        >Apply Theme</Button>
-      </div><pre className='mt-8'>
+        <Button className="animate-in zoom-in duration-200" variant="secondary">
+          Secondary
+        </Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="ghost" onClick={() => handleSetTheme({}, "test")}>
+          Apply Theme
+        </Button>
+      </div>
+      <pre className="mt-8">
         {JSON.stringify(resolvedConfig.plugins, null, 2)}
       </pre>
     </section>
