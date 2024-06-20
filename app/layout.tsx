@@ -1,12 +1,13 @@
-import "@/styles/globals.css"
+import "@/shared-core/styles/globals.css"
 import { Metadata } from "next"
+import { SiteHeader } from "@/shared-core/components/site-header"
+import { TailwindIndicator } from "@/shared-core/components/tailwind-indicator"
+import { ThemeProvider } from "@/shared-core/components/theme-provider"
+import { fontSans } from "@/shared-core/lib/fonts"
+import { cn } from "@/shared-core/lib/utils"
+import CoreProvider from "@/shared-core/provider/core-provider"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
-import { cn } from "@/lib/utils"
-import { SiteHeader } from "@/components/site-header"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
   title: {
@@ -40,13 +41,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <CoreProvider>
             <div className="relative flex min-h-screen flex-col">
               <SiteHeader />
               <div className="flex-1">{children}</div>
             </div>
             <TailwindIndicator />
-          </ThemeProvider>
+          </CoreProvider>
         </body>
       </html>
     </>
