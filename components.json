@@ -9,7 +9,7 @@
   },
   "rsc": false,
   "aliases": {
-    "utils": "@/lib/utils",
-    "components": "@/components"
+    "utils": "@/shared-core/lib/utils",
+    "components": "@/shared-core/components"
   }
 }
