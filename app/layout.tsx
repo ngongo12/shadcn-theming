@@ -1,12 +1,10 @@
-import "@/shared-core/styles/globals.css"
-import { Metadata, Viewport } from "next"
-import { SiteHeader } from "@/shared-core/components/site-header"
-import { TailwindIndicator } from "@/shared-core/components/tailwind-indicator"
-import { fontSans } from "@/shared-core/lib/fonts"
-import { cn } from "@/shared-core/lib/utils"
-import CoreProvider from "@/shared-core/provider/core-provider"
+import '@/shared-core/styles/globals.css'
+import {Metadata, Viewport} from 'next'
+import CoreProvider from '@/shared-core/provider/core-provider'
 
-import { siteConfig } from "@/config/site"
+import {siteConfig} from '@/config/site'
+import {SiteHeader} from '@/shared-core/components/site-header'
+import {TailwindIndicator} from '@/shared-core/components/tailwind-indicator'
 
 export const metadata: Metadata = {
   title: {
@@ -15,13 +13,13 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    {media: '(prefers-color-scheme: light)', color: 'white'},
+    {media: '(prefers-color-scheme: dark)', color: 'black'},
   ],
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
   },
 }
 
@@ -29,7 +27,7 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({children}: RootLayoutProps) {
   return (
     <>
       <CoreProvider>
@@ -44,8 +42,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
 }
 
 export const viewport: Viewport = {
-  colorScheme: "light",
-  themeColor: "#ffffff",
-  width: "device-width",
+  colorScheme: 'light',
+  themeColor: '#ffffff',
+  width: 'device-width',
   initialScale: 1,
 }
