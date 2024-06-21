@@ -2,7 +2,7 @@ import '@/shared-core/styles/globals.css'
 import {Metadata, Viewport} from 'next'
 import CoreProvider from '@/shared-core/provider/core-provider'
 
-import {siteConfig} from '@/config/site'
+import {siteConfig} from '@/shared-core/config/site'
 import {SiteHeader} from '@/shared-core/components/site-header'
 import {TailwindIndicator} from '@/shared-core/components/tailwind-indicator'
 

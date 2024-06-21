@@ -1,10 +1,10 @@
-import Link from "next/link"
-import { Icons } from "@/shared-core/components/icons"
-import { MainNav } from "@/shared-core/components/main-nav"
-import { ThemeToggle } from "@/shared-core/components/theme-toggle"
-import { buttonVariants } from "@/shared-core/components/ui/button"
+import Link from 'next/link'
 
-import { siteConfig } from "@/config/site"
+import {siteConfig} from '@/shared-core/config/site'
+import {buttonVariants} from '@/shared-core/components/ui/button'
+import {Icons} from '@/shared-core/components/icons'
+import {MainNav} from '@/shared-core/components/main-nav'
+import {ThemeToggle} from '@/shared-core/components/theme-toggle'
 
 export function SiteHeader() {
   return (
@@ -16,14 +16,12 @@ export function SiteHeader() {
             <Link
               href={siteConfig.links.github}
               target="_blank"
-              rel="noreferrer"
-            >
+              rel="noreferrer">
               <div
                 className={buttonVariants({
-                  size: "icon",
-                  variant: "ghost",
-                })}
-              >
+                  size: 'icon',
+                  variant: 'ghost',
+                })}>
                 <Icons.gitHub className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </div>
@@ -31,14 +29,12 @@ export function SiteHeader() {
             <Link
               href={siteConfig.links.twitter}
               target="_blank"
-              rel="noreferrer"
-            >
+              rel="noreferrer">
               <div
                 className={buttonVariants({
-                  size: "icon",
-                  variant: "ghost",
-                })}
-              >
+                  size: 'icon',
+                  variant: 'ghost',
+                })}>
                 <Icons.twitter className="h-5 w-5 fill-current" />
                 <span className="sr-only">Twitter</span>
               </div>

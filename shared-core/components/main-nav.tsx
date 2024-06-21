@@ -1,16 +1,16 @@
-import * as React from "react"
-import Link from "next/link"
-import { Icons } from "@/shared-core/components/icons"
-import { cn } from "@/shared-core/lib/utils"
+import * as React from 'react'
+import Link from 'next/link'
 
-import { NavItem } from "@/types/nav"
-import { siteConfig } from "@/config/site"
+import {NavItem} from '@/types/nav'
+import {siteConfig} from '@/shared-core/config/site'
+import {cn} from '@/shared-core/lib/utils'
+import {Icons} from '@/shared-core/components/icons'
 
 interface MainNavProps {
   items?: NavItem[]
 }
 
-export function MainNav({ items }: MainNavProps) {
+export function MainNav({items}: MainNavProps) {
   return (
     <div className="flex gap-6 md:gap-10">
       <Link href="/" className="flex items-center space-x-2">
@@ -26,13 +26,12 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex items-center text-sm font-medium text-muted-foreground",
-                    item.disabled && "cursor-not-allowed opacity-80"
-                  )}
-                >
+                    'flex items-center text-sm font-medium text-muted-foreground',
+                    item.disabled && 'cursor-not-allowed opacity-80',
+                  )}>
                   {item.title}
                 </Link>
-              )
+              ),
           )}
         </nav>
       ) : null}
