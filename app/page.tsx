@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import { Button, buttonVariants } from "@/shared-core/components/ui/button"
-import tailwindConfig from "@/tailwind.config"
 import useThemes from "@/shared-core/themes/useThemes"
+import tailwindConfig from "@/tailwind.config"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 import { siteConfig } from "@/config/site"
