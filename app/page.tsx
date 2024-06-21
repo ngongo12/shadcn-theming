@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button, buttonVariants } from "@/shared-core/components/ui/button"
 import tailwindConfig from "@/tailwind.config"
-import useThemes from "@/themes/useThemes"
+import useThemes from "@/shared-core/themes/useThemes"
 import resolveConfig from "tailwindcss/resolveConfig"
 
 import { siteConfig } from "@/config/site"
