@@ -2,13 +2,10 @@
 
 import Link from 'next/link'
 import useThemes from '@/shared-core/themes/useThemes'
-import tailwindConfig from '@/tailwind.config'
-import resolveConfig from 'tailwindcss/resolveConfig'
 
 import {siteConfig} from '@/shared-core/config/site'
 import {Button, buttonVariants} from '@/shared-core/components/ui/button'
-
-const resolvedConfig = resolveConfig(tailwindConfig)
+import MainTable from '@/shared-core/components/main-table/main-table'
 
 export default function IndexPage() {
   const {handleSetTheme} = useThemes()
@@ -47,9 +44,9 @@ export default function IndexPage() {
           Apply Theme
         </Button>
       </div>
-      <pre className="mt-8">
-        {JSON.stringify(resolvedConfig.plugins, null, 2)}
-      </pre>
+      <section className="mt-8">
+        <MainTable />
+      </section>
     </section>
   )
 }
