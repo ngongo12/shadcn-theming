@@ -14,6 +14,7 @@ import {
 
 import SortingFilter from '../sorting/sorting-filter'
 import {columnKey} from './column'
+import convertHeaderGroup from './convertHeaderGroup'
 import generateColumn from './generateColumn'
 import {Person, makeData} from './test/makeData'
 
@@ -26,7 +27,15 @@ const MainTable = () => {
   }, [])
 
   const initColumns: ColumnDef<Person>[] = [
-    {id: 'fullName', header: 'Full name'},
+    {
+      id: 'fullName',
+      header: 'Full name',
+      accessorFn: (row) => row,
+      cell: (row) => {
+        const value = row.getValue<Person>()
+        return `${value.firstName} ${value.lastName}`
+      },
+    },
     {id: 'info', header: 'Info'},
     {id: 'moreInfo', header: 'More Info'},
     {
@@ -80,7 +89,7 @@ const MainTable = () => {
     getFilteredRowModel: getFilteredRowModel(),
     debugTable: true,
   })
-
+  const convertedHeader = convertHeaderGroup(table.getHeaderGroups())
   return (
     <div>
       <div className="flex justify-between p-2">
@@ -89,12 +98,40 @@ const MainTable = () => {
       </div>
       <table className="w-full table-auto border-collapse border">
         <thead>
+          {convertedHeader.map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers?.map((header) => {
+                return (
+                  <>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <th
+                          className="border text-sm"
+                          key={header.id}
+                          colSpan={header.colSpan}
+                          rowSpan={header.rowSpan || 1}>
+                          <div>
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                          </div>
+                        </th>
+                      </>
+                    )}
+                  </>
+                )
+              })}
+            </tr>
+          ))}
+        </thead>
+        {/* <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
                   <th
-                    className="border-b"
+                    className="border"
                     key={header.id}
                     colSpan={header.colSpan}>
                     {header.isPlaceholder ? null : (
@@ -110,7 +147,7 @@ const MainTable = () => {
               })}
             </tr>
           ))}
-        </thead>
+        </thead> */}
         <tbody>
           {table.getRowModel().rows.map((row) => {
             return (
