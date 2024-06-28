@@ -7,13 +7,6 @@ const convertHeaderGroup = <T>(headers: HeaderGroup<T>[]): HeaderGroup<T>[] => {
       const arr = item.id.split('_')
 
       if (item.isPlaceholder) {
-        console.log(
-          '>>>>>>>>> isPlaceholder',
-          groupHeaderKey,
-          arr.slice(-1)?.[0],
-          arr,
-        )
-
         groupHeaderKey.push(item.id.split('_').slice(-1)?.[0])
         return {
           ...item,
