@@ -13,6 +13,14 @@ import {
 } from '@tanstack/react-table'
 
 import SortingFilter from '../sorting/sorting-filter'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../ui/table'
 import {columnKey} from './column'
 import convertHeaderGroup from './convertHeaderGroup'
 import generateColumn from './generateColumn'
@@ -96,65 +104,44 @@ const MainTable = () => {
         <h5 className="m-0 font-bold">Table Name</h5>
         <SortingFilter data={columnKeyDef} setData={setColumnKeyDef} />
       </div>
-      <table className="w-full table-auto border-collapse border">
-        <thead>
+      <Table className="rounded-sm">
+        <TableHeader>
           {convertedHeader.map((headerGroup) => (
-            <tr key={headerGroup.id}>
+            <TableRow className="hover:bg-unset" key={headerGroup.id}>
               {headerGroup.headers?.map((header) => {
                 return (
                   <>
                     {header.isPlaceholder ? null : (
                       <>
-                        <th
-                          className="border text-sm"
+                        <TableHead
+                          className={`border p-2 text-center ${
+                            (header?.column?.columnDef?.meta as any)
+                              ?.className ?? ''
+                          }`}
                           key={header.id}
                           colSpan={header.colSpan}
                           rowSpan={header.rowSpan || 1}>
-                          <div>
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
-                          </div>
-                        </th>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        </TableHead>
                       </>
                     )}
                   </>
                 )
               })}
-            </tr>
+            </TableRow>
           ))}
-        </thead>
-        {/* <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <th
-                    className="border"
-                    key={header.id}
-                    colSpan={header.colSpan}>
-                    {header.isPlaceholder ? null : (
-                      <div>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                      </div>
-                    )}
-                  </th>
-                )
-              })}
-            </tr>
-          ))}
-        </thead> */}
-        <tbody>
+        </TableHeader>
+
+        <TableBody>
           {table.getRowModel().rows.map((row) => {
             return (
-              <tr key={row.id} className="border-b">
+              <TableRow key={row.id} className="border-b">
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <td
+                    <TableCell
                       className={`p-2 ${
                         (cell?.column?.columnDef?.meta as any)?.className ?? ''
                       }`}
@@ -165,14 +152,14 @@ const MainTable = () => {
                         cell.column.columnDef.cell,
                         cell.getContext(),
                       )}
-                    </td>
+                    </TableCell>
                   )
                 })}
-              </tr>
+              </TableRow>
             )
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }
