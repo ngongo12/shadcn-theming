@@ -24,6 +24,7 @@ import {
 import {columnKey} from './column'
 import convertHeaderGroup from './convertHeaderGroup'
 import generateColumn from './generateColumn'
+import TableFilter from './table-filter'
 import {Person, makeData} from './test/makeData'
 
 const MainTable = () => {
@@ -100,6 +101,7 @@ const MainTable = () => {
   const convertedHeader = convertHeaderGroup(table.getHeaderGroups())
   return (
     <div>
+      <TableFilter />
       <div className="flex justify-between p-2">
         <h5 className="m-0 font-bold">Table Name</h5>
         <SortingFilter data={columnKeyDef} setData={setColumnKeyDef} />
@@ -109,26 +111,19 @@ const MainTable = () => {
           {convertedHeader.map((headerGroup) => (
             <TableRow className="hover:bg-unset" key={headerGroup.id}>
               {headerGroup.headers?.map((header) => {
-                return (
-                  <>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <TableHead
-                          className={`border p-2 text-center ${
-                            (header?.column?.columnDef?.meta as any)
-                              ?.className ?? ''
-                          }`}
-                          key={header.id}
-                          colSpan={header.colSpan}
-                          rowSpan={header.rowSpan || 1}>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                        </TableHead>
-                      </>
+                return header.isPlaceholder ? null : (
+                  <TableHead
+                    className={`border p-2 text-center ${
+                      (header?.column?.columnDef?.meta as any)?.className ?? ''
+                    }`}
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    rowSpan={header.rowSpan || 1}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
                     )}
-                  </>
+                  </TableHead>
                 )
               })}
             </TableRow>
@@ -142,12 +137,10 @@ const MainTable = () => {
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <TableCell
+                      key={cell.id}
                       className={`p-2 ${
                         (cell?.column?.columnDef?.meta as any)?.className ?? ''
-                      }`}
-                      {...{
-                        key: cell.id,
-                      }}>
+                      }`}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

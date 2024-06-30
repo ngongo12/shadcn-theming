@@ -17,7 +17,13 @@ import {GearIcon, HamburgerMenuIcon} from '@radix-ui/react-icons'
 
 import {ColumnDefine} from '../main-table/column'
 import {Checkbox} from '../ui/checkbox'
-import {Popover, PopoverContent, PopoverTrigger} from '../ui/popover'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 import SortingFilterContext from './sorting-filter-context'
 import useChecked from './useChecked'
 import useSorting from './useSorting'
@@ -30,19 +36,21 @@ export const SortingFilter = ({
   setData: React.Dispatch<React.SetStateAction<ColumnDefine[]>>
 }) => {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <GearIcon className="size-6" />
-      </PopoverTrigger>
-      <PopoverContent className="w-fit">
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-fit min-w-56">
+        <DropdownMenuLabel>Setting</DropdownMenuLabel>
+        <DropdownMenuSeparator />
         <SortingFilterContext.Provider
           value={{
             sortingListState: [data, setData],
           }}>
           <_SortingFilter data={data} isRoot />
         </SortingFilterContext.Provider>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 export const _SortingFilter = ({

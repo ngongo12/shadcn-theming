@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.rdp-vhidden {
+  @apply hidden;
+}

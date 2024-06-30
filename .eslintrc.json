@@ -38,9 +38,22 @@
     "react-hooks/exhaustive-deps": "off",
     "imports-first": 0,
     "unused-imports/no-unused-imports": "warn",
-    "no-unused-vars": "warn",
     "no-extra-boolean-cast": 0,
-    "no-octal-escape": "warn"
+    "no-octal-escape": "warn",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ]
   },
   "settings": {
     "tailwindcss": {
