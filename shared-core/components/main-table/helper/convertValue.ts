@@ -25,7 +25,10 @@ export const convertValueToFormValue = (
         const end = dayjs(arr[1])
 
         if (start.isValid() && end.isValid()) {
-          return [start, end]
+          return {
+            from: start,
+            to: end,
+          }
         }
         return
       }
