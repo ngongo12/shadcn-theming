@@ -19,7 +19,7 @@ export default function IndexPage() {
   const {handleSetTheme} = useThemes()
   const [data, setData] = useState<Person[]>([])
   useEffect(() => {
-    setData(() => makeData(20))
+    setData(makeData(20))
     return () => {}
   }, [])
   const initColumns: ColumnDef<Person>[] = [

@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {ChevronDown, ChevronUp} from 'lucide-react'
-import {FieldValues, useForm} from 'react-hook-form'
+import {FieldValues} from 'react-hook-form'
 
 import {Button} from '@/shared-core/components/ui/button'
 import {Form} from '@/shared-core/components/ui/form'
@@ -11,9 +11,8 @@ import {TableFilterProps} from './type'
 
 const TableFilter = ({useFilter}: TableFilterProps) => {
   const [expanded, setExpanded] = useState(false)
-  const form = useForm()
   const {maxCols} = useMaxCols()
-  const {options, onSearch} = useFilter ?? {}
+  const {options, onSearch, form} = useFilter ?? {}
   const expand = (options?.length ?? 0) > maxCols - 1
 
   function onSubmit(data: FieldValues) {
@@ -21,11 +20,12 @@ const TableFilter = ({useFilter}: TableFilterProps) => {
   }
 
   const onClear = () => {
-    form.reset()
+    form?.reset()
     onSearch?.({})
   }
 
   if (!options?.length) return
+  if (!form) return null
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

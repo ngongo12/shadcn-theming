@@ -6,11 +6,10 @@ import {
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
-  getFilteredRowModel,
   getGroupedRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import {useForm} from 'react-hook-form'
 
 import SortingFilter from '../sorting/sorting-filter'
 import {
@@ -37,6 +36,7 @@ const MainTable = <T,>({
   tableName = 'main',
   moduleId = 0,
 }: MainTableProps<T>) => {
+  const form = useForm()
   const [columnKeyDef, setColumnKeyDef] = useState(columnKey)
   const {selectColumn, setRowSelection, rowSelection} =
     useRowSelection<T>(enableRowSelection)
@@ -45,7 +45,7 @@ const MainTable = <T,>({
     generateColumn(columnKeyDef, initColumns),
   )
 
-  const useFilter = useTableFilter({...filterProps, tableName, moduleId})
+  const useFilter = useTableFilter({...filterProps, tableName, moduleId, form})
 
   const table = useReactTable({
     data,
@@ -56,8 +56,6 @@ const MainTable = <T,>({
     getExpandedRowModel: getExpandedRowModel(),
     getGroupedRowModel: getGroupedRowModel(),
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     debugTable: true,
   })
 
@@ -65,7 +63,6 @@ const MainTable = <T,>({
     () => convertHeaderGroup(table.getHeaderGroups()),
     [table.getHeaderGroups()],
   )
-
   return (
     <div>
       <TableFilter {...filterProps} useFilter={useFilter} />
@@ -101,29 +98,38 @@ const MainTable = <T,>({
         </TableHeader>
 
         <TableBody>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <TableRow key={row.id} className="border-b">
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <TableCell
-                      key={cell.id}
-                      className={`p-2 ${
-                        (cell?.column?.columnDef?.meta as any)?.className ?? ''
-                      }`}
-                      style={{
-                        width: cell.column.getSize(),
-                      }}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            )
-          })}
+          {table.getRowModel().rows.length ? (
+            table.getRowModel().rows.map((row) => {
+              return (
+                <TableRow key={row.id} className="border-b">
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className={`p-2 ${
+                          (cell?.column?.columnDef?.meta as any)?.className ??
+                          ''
+                        }`}
+                        style={{
+                          width: cell.column.getSize(),
+                        }}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              )
+            })
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

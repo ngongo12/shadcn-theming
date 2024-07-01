@@ -11,7 +11,7 @@ export interface MainTableProps<T> {
   initColumns: ColumnDef<T>[]
   columnKey: ColumnDefine[]
   enableRowSelection?: boolean
-  filterProps: FilterProps
+  filterProps: Omit<FilterProps, 'form'>
 }
 
 export interface FilterProps {
@@ -22,7 +22,7 @@ export interface FilterProps {
   moduleId?: number
   tableName?: string
   defaultValue?: FieldValues
-  form?: ReturnType<typeof useForm>
+  form: ReturnType<typeof useForm>
 }
 
 export interface ColumnDefine {

@@ -22,8 +22,6 @@ const useTableFilter = ({
   defaultValue,
   form,
 }: FilterProps) => {
-  const [filters, setFilters] = useState<FilterOption>()
-  const timeoutRef = useRef<number>()
   const query = allowUrlParams
     ? getQueryInnerModule(getQuery() ?? {}, moduleId, tableName)
     : {}
@@ -41,6 +39,11 @@ const useTableFilter = ({
       ),
     }
   }, {})
+
+  const [filters, setFilters] = useState<FilterOption>({
+    query: mrDefaultValueAndParam,
+  })
+  const timeoutRef = useRef<number>()
 
   const onSearch = (values: FieldValues) => {
     setFilters((prev) => ({
@@ -65,14 +68,16 @@ const useTableFilter = ({
     getListFn?.(searchParams)
   }
   useEffect(() => {
-    console.log('>>>>>', mrDefaultValueAndParam)
-
-    form?.setValue('', mrDefaultValueAndParam)
+    Object.entries(mrDefaultValueAndParam ?? {}).map(([key, value]) => {
+      console.log('>>>>>', key, value)
+      form?.setValue(key, value)
+    })
   }, [])
   return {
     onSearch,
     filters,
     options,
+    form,
   }
 }
 
