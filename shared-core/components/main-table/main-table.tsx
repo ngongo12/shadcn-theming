@@ -34,6 +34,8 @@ const MainTable = <T,>({
   initColumns,
   enableRowSelection,
   filterProps,
+  tableName = 'main',
+  moduleId = 0,
 }: MainTableProps<T>) => {
   const [columnKeyDef, setColumnKeyDef] = useState(columnKey)
   const {selectColumn, setRowSelection, rowSelection} =
@@ -43,7 +45,7 @@ const MainTable = <T,>({
     generateColumn(columnKeyDef, initColumns),
   )
 
-  const useFilter = useTableFilter(filterProps)
+  const useFilter = useTableFilter({...filterProps, tableName, moduleId})
 
   const table = useReactTable({
     data,

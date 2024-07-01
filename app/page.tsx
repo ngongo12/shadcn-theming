@@ -105,6 +105,7 @@ export default function IndexPage() {
           enableRowSelection
           filterProps={{
             options: listFilter,
+            allowUrlParams: true,
           }}
         />
       </section>
