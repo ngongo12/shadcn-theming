@@ -7,10 +7,13 @@ const convertHeaderGroup = <T>(headers: HeaderGroup<T>[]): HeaderGroup<T>[] => {
       const arr = item.id.split('_')
 
       if (item.isPlaceholder) {
-        groupHeaderKey.push(item.id.split('_').slice(-1)?.[0])
+        const key = item.id.split('_').slice(-1)?.[0]
+        const _groupHeader = [...groupHeaderKey]
+        groupHeaderKey.push(key)
+
         return {
           ...item,
-          isPlaceholder: false,
+          isPlaceholder: _groupHeader.includes(key),
           rowSpan: arr.length - 1,
         }
       } else {

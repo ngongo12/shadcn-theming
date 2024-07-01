@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect, useState} from 'react'
+import React, {useMemo, useState} from 'react'
 import {
   ColumnDef,
   flexRender,
@@ -21,76 +21,36 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table'
-import {columnKey} from './column'
 import convertHeaderGroup from './convertHeaderGroup'
 import generateColumn from './generateColumn'
+import useRowSelection from './hooks/useRowSelection'
+import useTableFilter from './hooks/useTableFilter'
 import TableFilter from './table-filter'
-import {Person, makeData} from './test/makeData'
+import {MainTableProps} from './type'
 
-const MainTable = () => {
-  const [data, setData] = React.useState<Person[]>([])
+const MainTable = <T,>({
+  data,
+  columnKey,
+  initColumns,
+  enableRowSelection,
+  filterProps,
+}: MainTableProps<T>) => {
   const [columnKeyDef, setColumnKeyDef] = useState(columnKey)
-  useEffect(() => {
-    setData(() => makeData(20))
-    return () => {}
-  }, [])
+  const {selectColumn, setRowSelection, rowSelection} =
+    useRowSelection<T>(enableRowSelection)
 
-  const initColumns: ColumnDef<Person>[] = [
-    {
-      id: 'fullName',
-      header: 'Full name',
-      accessorFn: (row) => row,
-      cell: (row) => {
-        const value = row.getValue<Person>()
-        return `${value.firstName} ${value.lastName}`
-      },
-    },
-    {id: 'info', header: 'Info'},
-    {id: 'moreInfo', header: 'More Info'},
-    {
-      id: 'firstName',
-      header: 'First name',
-      accessorFn: (row: Person) => row.firstName,
-      cell: (row) => row.getValue(),
-    },
-    {
-      id: 'lastName',
-      header: 'lastName',
-      accessorFn: (row: Person) => row.lastName,
-      cell: (row) => row.getValue(),
-    },
-    {
-      id: 'age',
-      header: 'age',
-      accessorFn: (row: Person) => row.age,
-      cell: (row) => row.getValue(),
-    },
-    {
-      id: 'visits',
-      header: 'visits',
-      accessorFn: (row: Person) => row.visits,
-      cell: (row) => row.getValue(),
-    },
-    {
-      id: 'status',
-      header: 'status',
-      meta: {className: 'text-center'},
-      accessorFn: (row: Person) => row.status,
-      cell: (row) => row.getValue(),
-    },
-    {
-      id: 'progress',
-      header: 'progress',
-      accessorFn: (row: Person) => row,
-      cell: (row) => (row.getValue() as Person)?.progress,
-    },
-  ]
+  const columns: ColumnDef<T>[] = selectColumn.concat(
+    generateColumn(columnKeyDef, initColumns),
+  )
 
-  const columns: ColumnDef<Person>[] = generateColumn(columnKeyDef, initColumns)
+  const useFilter = useTableFilter(filterProps)
 
   const table = useReactTable({
     data,
     columns,
+    state: {rowSelection},
+    enableRowSelection: enableRowSelection,
+    onRowSelectionChange: setRowSelection,
     getExpandedRowModel: getExpandedRowModel(),
     getGroupedRowModel: getGroupedRowModel(),
     getCoreRowModel: getCoreRowModel(),
@@ -98,10 +58,15 @@ const MainTable = () => {
     getFilteredRowModel: getFilteredRowModel(),
     debugTable: true,
   })
-  const convertedHeader = convertHeaderGroup(table.getHeaderGroups())
+
+  const convertedHeader = useMemo(
+    () => convertHeaderGroup(table.getHeaderGroups()),
+    [table.getHeaderGroups()],
+  )
+
   return (
     <div>
-      <TableFilter />
+      <TableFilter {...filterProps} useFilter={useFilter} />
       <div className="flex justify-between p-2">
         <h5 className="m-0 font-bold">Table Name</h5>
         <SortingFilter data={columnKeyDef} setData={setColumnKeyDef} />
@@ -118,7 +83,10 @@ const MainTable = () => {
                     }`}
                     key={header.id}
                     colSpan={header.colSpan}
-                    rowSpan={header.rowSpan || 1}>
+                    rowSpan={header.rowSpan || 1}
+                    style={{
+                      width: header.getSize(),
+                    }}>
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext(),
@@ -140,7 +108,10 @@ const MainTable = () => {
                       key={cell.id}
                       className={`p-2 ${
                         (cell?.column?.columnDef?.meta as any)?.className ?? ''
-                      }`}>
+                      }`}
+                      style={{
+                        width: cell.column.getSize(),
+                      }}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
