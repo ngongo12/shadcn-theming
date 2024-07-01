@@ -11,6 +11,7 @@ import {
 } from '@tanstack/react-table'
 import {useForm} from 'react-hook-form'
 
+import Pagination from '../pagination'
 import SortingFilter from '../sorting/sorting-filter'
 import {
   Table,
@@ -132,6 +133,7 @@ const MainTable = <T,>({
           )}
         </TableBody>
       </Table>
+      <Pagination total={200} />
     </div>
   )
 }
