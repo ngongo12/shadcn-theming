@@ -1,6 +1,12 @@
 'use client'
 
-import React, {useMemo, useState} from 'react'
+import React, {
+  Ref,
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react'
 import {
   ColumnDef,
   flexRender,
@@ -11,12 +17,14 @@ import {
 } from '@tanstack/react-table'
 import {useForm} from 'react-hook-form'
 
-import Pagination from '../pagination'
+import Pagination, {PaginationProps} from '../pagination'
 import SortingFilter from '../sorting/sorting-filter'
+import {Button} from '../ui/button'
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -26,27 +34,43 @@ import generateColumn from './generateColumn'
 import useRowSelection from './hooks/useRowSelection'
 import useTableFilter from './hooks/useTableFilter'
 import TableFilter from './table-filter'
-import {MainTableProps} from './type'
+import {MainTableHandler, MainTableProps} from './type'
 
-const MainTable = <T,>({
-  data,
-  columnKey,
-  initColumns,
-  enableRowSelection,
-  filterProps,
-  tableName = 'main',
-  moduleId = 0,
-}: MainTableProps<T>) => {
+const MainTable = <T,>(
+  {
+    data,
+    columnKey,
+    initColumns,
+    enableRowSelection,
+    filterProps,
+    tableName = 'main',
+    moduleId = 0,
+    tableHeader,
+    multipleSelectActions,
+  }: MainTableProps<T>,
+  ref: Ref<MainTableHandler>,
+) => {
   const form = useForm()
   const [columnKeyDef, setColumnKeyDef] = useState(columnKey)
-  const {selectColumn, setRowSelection, rowSelection} =
+  const {selectColumn, setRowSelection, rowSelection, selectedRowKey} =
     useRowSelection<T>(enableRowSelection)
 
   const columns: ColumnDef<T>[] = selectColumn.concat(
     generateColumn(columnKeyDef, initColumns),
   )
 
-  const useFilter = useTableFilter({...filterProps, tableName, moduleId, form})
+  const useFilter = useTableFilter({
+    ...filterProps,
+    tableName,
+    moduleId,
+    form,
+  })
+  const {filters, onPageChange, onRefreshData} = useFilter
+
+  useImperativeHandle(ref, () => ({
+    refreshList: onRefreshData,
+    selectedRowId: selectedRowKey,
+  }))
 
   const table = useReactTable({
     data,
@@ -64,15 +88,25 @@ const MainTable = <T,>({
     () => convertHeaderGroup(table.getHeaderGroups()),
     [table.getHeaderGroups()],
   )
+  const pagingOption: PaginationProps = {
+    currentPage: (filters.paging?.start ?? 0) / (filters.paging?.limit ?? 20),
+    currentPageSize: filters.paging?.limit ?? 20,
+    onPageChange: onPageChange,
+  }
+  const rows = table.getRowModel().rows
   return (
     <div>
       <TableFilter {...filterProps} useFilter={useFilter} />
       <div className="flex justify-between p-2">
-        <h5 className="m-0 font-bold">Table Name</h5>
-        <SortingFilter data={columnKeyDef} setData={setColumnKeyDef} />
+        <h5 className="m-0 font-bold">{tableHeader?.title}</h5>
+        <div className="flex items-center">
+          {tableHeader?.actionButtons}
+          {tableHeader?.export && <Button>Export</Button>}
+          <SortingFilter data={columnKeyDef} setData={setColumnKeyDef} />
+        </div>
       </div>
-      <Table className="rounded-sm">
-        <TableHeader>
+      <Table className="relative rounded-sm">
+        <TableHeader className="bg-secondary sticky top-0">
           {convertedHeader.map((headerGroup) => (
             <TableRow className="hover:bg-unset" key={headerGroup.id}>
               {headerGroup.headers?.map((header) => {
@@ -97,12 +131,14 @@ const MainTable = <T,>({
             </TableRow>
           ))}
         </TableHeader>
-
         <TableBody>
-          {table.getRowModel().rows.length ? (
-            table.getRowModel().rows.map((row) => {
+          {rows.length ? (
+            rows.map((row) => {
               return (
-                <TableRow key={row.id} className="border-b">
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  className="border-b">
                   {row.getVisibleCells().map((cell) => {
                     return (
                       <TableCell
@@ -132,10 +168,28 @@ const MainTable = <T,>({
             </TableRow>
           )}
         </TableBody>
+        <TableFooter
+          className={`bg-secondary sticky bottom-0 ${
+            selectedRowKey?.length ? '' : 'hidden'
+          }`}>
+          <TableRow>
+            <TableCell colSpan={rows?.[0]?.getVisibleCells().length}>
+              <div className="flex items-center justify-between">
+                Đã chọn {Object.keys(rowSelection).length}
+                <div>{multipleSelectActions}</div>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
-      <Pagination total={200} />
+
+      <Pagination {...pagingOption} total={200} />
     </div>
   )
 }
 
-export default MainTable
+const ExportMainTable = forwardRef(MainTable) as <T>(
+  props: MainTableProps<T> & {ref?: Ref<MainTableHandler>},
+) => ReturnType<typeof MainTable<T>>
+
+export default ExportMainTable

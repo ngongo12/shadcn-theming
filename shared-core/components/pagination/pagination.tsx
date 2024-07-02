@@ -25,7 +25,7 @@ const Pagination = ({
   currentPageSize = 20,
   onPageChange,
 }: PaginationProps) => {
-  const [pageSize, setPageSize] = useState(currentPageSize ?? pagePerSize?.[1])
+  const [pageSize, setPageSize] = useState(1)
   const [page, setPage] = useState(currentPage ?? 1)
   const onPageClick = (_page: number) => {
     setPage(_page)
@@ -37,6 +37,7 @@ const Pagination = ({
     setPage(1)
   }
   useEffect(() => {
+    console.log('>>>> currentPage', currentPage)
     currentPage && setPage(currentPage)
   }, [currentPage])
 
@@ -46,6 +47,7 @@ const Pagination = ({
 
   const maxPage = Math.ceil(total / pageSize)
   const pageShow = getPageShow(page, maxPage)
+
   return (
     <UIPagination>
       <PaginationContent>

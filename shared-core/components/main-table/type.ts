@@ -10,8 +10,26 @@ export interface MainTableProps<T> {
   data: T[]
   initColumns: ColumnDef<T>[]
   columnKey: ColumnDefine[]
+
   enableRowSelection?: boolean
+  multipleSelectActions?: React.ReactNode
+  getRowId?: (row: T) => string | number
+
   filterProps: Omit<FilterProps, 'form'>
+  tableHeader?: TableHeader
+}
+
+export interface MainTableHandler {
+  selectedRowId: (number | string)[] | null
+  refreshList: () => void
+}
+
+export interface TableHeader {
+  title?: string
+  actionButtons: React.ReactNode
+  export?: {
+    query: string
+  }
 }
 
 export interface FilterProps {

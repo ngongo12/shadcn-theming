@@ -37,7 +37,10 @@ const useRowSelection = <T,>(enableRowSelection?: boolean) => {
         },
       ]
     : []
-  return {rowSelection, setRowSelection, selectColumn}
+
+  const selectedRowKey = rowSelection ? Object.keys(rowSelection) : null
+
+  return {rowSelection, setRowSelection, selectColumn, selectedRowKey}
 }
 
 export default useRowSelection

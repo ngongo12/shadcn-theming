@@ -41,27 +41,27 @@ const useTableFilter = ({
   }, {})
 
   const [filters, setFilters] = useState<FilterOption>({
-    query: mrDefaultValueAndParam,
+    filter: mrDefaultValueAndParam,
   })
   const timeoutRef = useRef<number>()
 
   const onSearch = (values: FieldValues) => {
     setFilters((prev) => ({
       ...(prev ?? {}),
-      query: convertValuesToPayload(values, options),
+      filter: convertValuesToPayload(values, options),
     }))
   }
   useEffect(() => {
     timeoutRef.current && clearTimeout(timeoutRef.current)
     timeoutRef.current = window.setTimeout(() => {
-      allowUrlParams && replaceURLParams(filters?.query, moduleId, tableName)
+      allowUrlParams && replaceURLParams(filters?.filter, moduleId, tableName)
     }, 10)
 
     onRefreshData()
     return () => {
       timeoutRef.current && clearTimeout(timeoutRef.current)
     }
-  }, [JSON.stringify(filters?.query)])
+  }, [JSON.stringify(filters?.filter)])
 
   const onRefreshData = () => {
     const searchParams = convertFilterFn ? convertFilterFn(filters) : filters
@@ -73,19 +73,53 @@ const useTableFilter = ({
       form?.setValue(key, value)
     })
   }, [])
+
+  const onPageChange = ({
+    page,
+    pagePerSize,
+  }: {
+    page?: number
+    pagePerSize?: number
+  }) => {
+    console.log('>>>>>', page)
+    if (page) {
+      setFilters((prevState) => ({
+        ...prevState,
+        paging: {
+          ...(prevState?.paging ?? {}),
+          start: (page - 1) * (filters?.paging?.limit ?? 20),
+        },
+      }))
+      return
+    }
+    if (pagePerSize) {
+      setFilters((prevState) => ({
+        ...prevState,
+        paging: {
+          ...(prevState?.paging ?? {}),
+          start: 0,
+          limit: pagePerSize,
+        },
+      }))
+      return
+    }
+  }
+
   return {
     onSearch,
     filters,
     options,
     form,
+    onRefreshData,
+    onPageChange,
   }
 }
 
 type FilterOption = {
-  query?: {
+  filter?: {
     [key: string]: string | number | Date | boolean | undefined
   }
-  filter?: {start?: number; limit?: number}
+  paging?: {start?: number; limit?: number}
 }
 
 export default useTableFilter
