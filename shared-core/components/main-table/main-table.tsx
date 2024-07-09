@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useMemo, useState} from 'react'
+import React, {useMemo, useRef, useState} from 'react'
 import {
   ColumnDef,
   flexRender,
@@ -47,7 +47,16 @@ const MainTable = <T,>({
   )
 
   const useFilter = useTableFilter({...filterProps, tableName, moduleId, form})
+  const div1Ref = useRef<HTMLTableElement>(null)
+  const div2Ref = useRef<HTMLTableElement>(null)
 
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLDivElement
+    const {scrollLeft} = target
+    if (div2Ref.current) {
+      div2Ref.current.scrollLeft = scrollLeft
+    }
+  }
   const table = useReactTable({
     data,
     columns,
@@ -64,6 +73,7 @@ const MainTable = <T,>({
     () => convertHeaderGroup(table.getHeaderGroups()),
     [table.getHeaderGroups()],
   )
+
   return (
     <div>
       <TableFilter {...filterProps} useFilter={useFilter} />
@@ -71,68 +81,79 @@ const MainTable = <T,>({
         <h5 className="m-0 font-bold">Table Name</h5>
         <SortingFilter data={columnKeyDef} setData={setColumnKeyDef} />
       </div>
-      <Table className="rounded-sm">
-        <TableHeader>
-          {convertedHeader.map((headerGroup) => (
-            <TableRow className="hover:bg-unset" key={headerGroup.id}>
-              {headerGroup.headers?.map((header) => {
-                return header.isPlaceholder ? null : (
-                  <TableHead
-                    className={`border p-2 text-center ${
-                      (header?.column?.columnDef?.meta as any)?.className ?? ''
-                    }`}
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    rowSpan={header.rowSpan || 1}
-                    style={{
-                      width: header.getSize(),
-                    }}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-
-        <TableBody>
-          {table.getRowModel().rows.length ? (
-            table.getRowModel().rows.map((row) => {
-              return (
-                <TableRow key={row.id} className="border-b">
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <TableCell
-                        key={cell.id}
-                        className={`p-2 ${
-                          (cell?.column?.columnDef?.meta as any)?.className ??
+      <div className="overflow-hidden bg-slate-200">
+        <div className="relative w-full">
+          <Table
+            ref={div2Ref}
+            wrapperClass="overflow-hidden sticky top-0 left-0"
+            className="table-fixed rounded-sm">
+            <TableHeader>
+              {convertedHeader.map((headerGroup) => (
+                <TableRow className="hover:bg-unset" key={headerGroup.id}>
+                  {headerGroup.headers?.map((header) => {
+                    return header.isPlaceholder ? null : (
+                      <TableHead
+                        className={`border p-2 text-center ${
+                          (header?.column?.columnDef?.meta as any)?.className ??
                           ''
                         }`}
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        rowSpan={header.rowSpan || 1}
                         style={{
-                          width: cell.column.getSize(),
+                          width: header.getSize(),
                         }}>
                         {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
+                          header.column.columnDef.header,
+                          header.getContext(),
                         )}
-                      </TableCell>
+                      </TableHead>
                     )
                   })}
                 </TableRow>
-              )
-            })
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+              ))}
+            </TableHeader>
+          </Table>
+          <Table onScroll={handleScroll} ref={div1Ref} className="table-fixed">
+            <TableBody>
+              {table.getRowModel().rows.length ? (
+                table.getRowModel().rows.map((row) => {
+                  return (
+                    <TableRow key={row.id} className="border-b">
+                      {row.getVisibleCells().map((cell) => {
+                        return (
+                          <TableCell
+                            key={cell.id}
+                            className={`p-2 ${
+                              (cell?.column?.columnDef?.meta as any)
+                                ?.className ?? ''
+                            }`}
+                            style={{
+                              width: cell.column.getSize(),
+                            }}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </TableCell>
+                        )
+                      })}
+                    </TableRow>
+                  )
+                })
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
       <Pagination total={200} />
     </div>
   )

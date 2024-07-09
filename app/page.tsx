@@ -19,7 +19,7 @@ export default function IndexPage() {
   const {handleSetTheme} = useThemes()
   const [data, setData] = useState<Person[]>([])
   useEffect(() => {
-    setData(makeData(20))
+    setData(makeData(25))
     return () => {}
   }, [])
   const initColumns: ColumnDef<Person>[] = [
@@ -73,7 +73,7 @@ export default function IndexPage() {
     },
   ]
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+    <section className="container grid items-center gap-6 overflow-x-hidden pb-8 pt-6 md:py-10">
       <div className="flex gap-4">
         <Link
           href={siteConfig.links.docs}
@@ -97,7 +97,7 @@ export default function IndexPage() {
           Apply Theme
         </Button>
       </div>
-      <section className="mt-8">
+      <section className="mt-8 w-full overflow-hidden">
         <MainTable
           data={data}
           initColumns={initColumns}
