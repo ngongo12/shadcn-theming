@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 
 import {
   PaginationContent,
@@ -60,7 +60,7 @@ const Pagination = ({
           const prevPage = pageShow[idx - 1]
           const jump = prevPage && p - prevPage > 1
           return (
-            <>
+            <Fragment key={idx}>
               {jump && (
                 <PaginationItem>
                   <PaginationEllipsis />
@@ -73,7 +73,7 @@ const Pagination = ({
                   {p}
                 </PaginationLink>
               </PaginationItem>
-            </>
+            </Fragment>
           )
         })}
 

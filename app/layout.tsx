@@ -33,7 +33,7 @@ export default function RootLayout({children}: RootLayoutProps) {
       <CoreProvider>
         <div className="relative flex min-h-screen flex-col">
           <SiteHeader />
-          <div className="flex-1">{children}</div>
+          <div className="flex-1 overflow-x-hidden">{children}</div>
         </div>
         <TailwindIndicator />
       </CoreProvider>

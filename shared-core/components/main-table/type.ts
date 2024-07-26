@@ -7,7 +7,8 @@ import useTableFilter from './hooks/useTableFilter'
 export interface MainTableProps<T> {
   tableName?: string
   moduleId?: number
-  data: T[]
+  data: T[],
+  total?: number
   initColumns: ColumnDef<T>[]
   columnKey: ColumnDefine[]
 

@@ -11,7 +11,7 @@ const CoreProvider = ({children}: {children: React.ReactNode}) => {
       <head />
       <body
         className={cn(
-          'bg-background min-h-screen font-sans antialiased',
+          'bg-background min-h-screen w-screen overflow-x-hidden font-sans antialiased',
           fontSans.variable,
         )}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

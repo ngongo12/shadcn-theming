@@ -31,8 +31,7 @@ const useRowSelection = <T,>(enableRowSelection?: boolean) => {
               />
             </div>
           ),
-          maxSize: 16,
-          size: 16,
+          maxSize: 34,
           meta: {className: 'text-center'},
         },
       ]
