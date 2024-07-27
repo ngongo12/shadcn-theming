@@ -142,23 +142,82 @@
     &:only-child {
       @include hide-before();
     }
+
+    &.last-branch {
+
+      >.chart-children {
+        display: block;
+        padding-left: 80px;
+
+        &::before {
+          content: '';
+          left: 59px;
+          top: -20px;
+          position: absolute;
+          height: calc(100% - 48px);
+          transform: translateX(-100%);
+
+          @include path();
+          border-left: none;
+        }
+
+        >.chart-tree {
+          @include hide-before()
+        }
+
+        .chart-item {
+          &::before {
+            left: 0;
+            width: 20%;
+            transform: translateX(-100%);
+            border-top: none;
+            border-right: none;
+            @include hide-before();
+          }
+        }
+
+        &.show-path {
+
+          &::before {
+            border-top: none;
+            border-bottom: none;
+            background-color: aliceblue;
+          }
+        }
+      }
+
+      >.chart-item {
+        &::after {
+          // height: 100%;
+          left: 10%;
+        }
+      }
+    }
   }
 
   .chart-children {
     display: flex;
     position: relative;
 
-    &.show-path::before {
-      content: '';
-      position: absolute;
-      top: -23px;
-      left: 0;
-      width: 100%;
-      border: 1px solid gray;
-      @include path();
+    &.show-path {
+      &::before {
+        content: '';
+        position: absolute;
+        top: -23px;
+        left: 0;
+        width: 100%;
+        border: 1px solid gray;
+        // @include path();
+        background-color: aqua;
+        border-top: none;
+        transform: translateY(100%);
+      }
 
-      border-top: none;
-      transform: translateY(100%);
+
+      &.only {
+        background: pink;
+        @include hide-before();
+      }
     }
 
   }

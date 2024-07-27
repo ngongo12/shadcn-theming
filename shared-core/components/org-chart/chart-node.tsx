@@ -2,6 +2,7 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
   useSortable,
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 
 import './chart-node.scss'
@@ -43,27 +44,34 @@ const ChartNode = <T extends Base<T>>({
     zIndex: isDragging ? 1 : 0,
     position: 'relative',
   }
-
+  const childIsLeaf = checkChildLeft(item.children)
   return (
     <div
       className={`chart-tree ${level === 1 ? 'root' : ''} ${
         hidePath ? 'hide-path' : ''
-      }`}
+      } ${childIsLeaf ? 'last-branch' : ''}`}
       ref={setNodeRef}
       style={{...style}}
       {...listeners}
       {...attributes}
       key={item.id}>
-      <div className={`chart-item ${item.children ? '' : 'not-child'}`}>
+      <div className={`chart-item ${item.children ? '' : 'not-child'} `}>
         {renderItem?.(item)}
         <div className="button-add" onClick={() => onAddNewNode(item.id)}>
           Add
         </div>
       </div>
-      <div className={`chart-children ${isDragContainer ? 'show-path' : ''}`}>
+      <div
+        className={`chart-children ${isDragContainer ? 'show-path' : ''} ${
+          childIsLeaf ? 'leaf' : ''
+        } ${item.children?.length === 1 ? 'only' : ''}`}>
         <SortableContext
           items={(item?.children ?? []).map?.((e) => e.id?.toString())}
-          strategy={horizontalListSortingStrategy}>
+          strategy={
+            childIsLeaf
+              ? verticalListSortingStrategy
+              : horizontalListSortingStrategy
+          }>
           {item.children?.map((child) => (
             <ChartNode
               item={child}
@@ -76,6 +84,18 @@ const ChartNode = <T extends Base<T>>({
       </div>
     </div>
   )
+}
+
+const checkChildLeft = (list?: any[]) => {
+  if (!list) {
+    return false
+  }
+  for (const item of list) {
+    if (item.children?.length) {
+      return false
+    }
+  }
+  return true
 }
 
 export default ChartNode
