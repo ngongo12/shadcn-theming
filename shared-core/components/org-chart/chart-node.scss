@@ -1,7 +1,7 @@
 .org-chart-container {
 
   @mixin path {
-    border: 1px dotted pink;
+    border: 1px dotted silver;
 
   }
 
@@ -23,6 +23,7 @@
     border-radius: 4px;
     border: 1px solid pink;
     @include path();
+    border-style: solid;
     position: relative;
 
     &:hover {
