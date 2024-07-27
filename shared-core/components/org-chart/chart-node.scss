@@ -1,0 +1,164 @@
+.org-chart-container {
+
+  @mixin path {
+    border: 1px dotted pink;
+
+  }
+
+  @mixin hide-before {
+    &::before {
+      content: none
+    }
+  }
+
+  @mixin hide-after {
+    &::after {
+      content: none
+    }
+  }
+
+  .chart-item {
+    width: 130px;
+    height: 50px;
+    border-radius: 4px;
+    border: 1px solid pink;
+    @include path();
+    position: relative;
+
+    &:hover {
+      .button-add {
+        display: block;
+      }
+    }
+
+    .button-add {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      display: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      height: 20px;
+      border: 1px solid blue;
+      @include path();
+
+      border-left: none;
+      border-bottom: none;
+      transform: translateY(100%);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      height: 22px;
+      border: 1px solid green;
+      @include path();
+
+      border-left: none;
+      transform: translateY(-100%);
+    }
+
+    &.not-child {
+      @include hide-after();
+
+      // &::after {
+      //   content: none
+      // }
+    }
+
+    &.hide-relationship {
+      @include hide-before();
+      @include hide-after();
+      // &::after,
+      // &::before {
+      //   content: none
+      // }
+    }
+  }
+
+  .chart-tree {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    position: relative;
+    padding: 0 4px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -22px;
+      left: -1px;
+      width: 100%;
+      border: 1px solid gray;
+      @include path();
+
+      border-bottom: none;
+
+      transform: translateY(100%);
+    }
+
+    &:last-child {
+      &::before {
+        width: calc(50% + 2px);
+      }
+    }
+
+    &.hide-path {
+      @include hide-before();
+
+    }
+
+    &.root {
+
+      @include hide-before();
+
+      >.chart-item:first-child {
+        @include hide-before();
+
+        &::before {
+          content: none;
+        }
+      }
+    }
+
+    &:first-child {
+      &::before {
+        width: calc(50%);
+        right: 0;
+        left: unset
+      }
+    }
+
+    &:only-child {
+      @include hide-before();
+    }
+  }
+
+  .chart-children {
+    display: flex;
+    position: relative;
+
+    &.show-path::before {
+      content: '';
+      position: absolute;
+      top: -23px;
+      left: 0;
+      width: 100%;
+      border: 1px solid gray;
+      @include path();
+
+      border-top: none;
+      transform: translateY(100%);
+    }
+
+  }
+}
