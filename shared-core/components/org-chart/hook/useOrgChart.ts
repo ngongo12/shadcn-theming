@@ -25,7 +25,9 @@ const useOrgChart = <T extends Base<T>>({data: _data}: {data: T}) => {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {}),
   )
+
   const [dragItem, setDragItem] = useState<T>()
+  const [collapseList, setCollapseList] = useState<string[]>([])
   const [data, setData] = useState<T>(_data)
   const [dragData, setDragData] = useState<{
     level?: number
@@ -82,11 +84,19 @@ const useOrgChart = <T extends Base<T>>({data: _data}: {data: T}) => {
   }
 
   const onAddNewNode = <T>(id: string, data?: T) => {
-    console.log('>>>>>>', id)
     const newData: any = data ?? {
       id: uuid(),
     }
     setData((prev) => handleAddNode(prev, newData, id))
+  }
+
+  const handleCollapse = (id: string) => {
+    setCollapseList((prev) => {
+      const collapse = prev.includes(id)
+      if (collapse) {
+        return prev.filter((item) => item !== id)
+      } else return prev.concat([id])
+    })
   }
 
   return {
@@ -98,6 +108,8 @@ const useOrgChart = <T extends Base<T>>({data: _data}: {data: T}) => {
     data,
     dragData,
     onAddNewNode,
+    collapseList,
+    handleCollapse,
   }
 }
 

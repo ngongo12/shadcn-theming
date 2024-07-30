@@ -18,7 +18,7 @@
   }
 
   .chart-item {
-    width: 130px;
+    width: 180px;
     height: 50px;
     border-radius: 4px;
     border: 1px solid pink;
@@ -29,13 +29,15 @@
     &:hover {
       .button-add {
         display: block;
+        cursor: pointer;
       }
     }
 
     .button-add {
       position: absolute;
+      cursor: pointer;
       bottom: 0;
-      left: 50%;
+      left: 80%;
       transform: translate(-50%, 50%);
       display: none;
     }
@@ -54,6 +56,13 @@
       transform: translateY(100%);
     }
 
+    .collapse-btn {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateY(50%) translateX(-50%);
+    }
+
     &::before {
       content: '';
       position: absolute;
@@ -68,6 +77,10 @@
 
     &.not-child {
       @include hide-after();
+
+      .button-add {
+        left: 50%;
+      }
 
       // &::after {
       //   content: none
@@ -109,7 +122,7 @@
 
     &:last-child {
       &::before {
-        width: calc(50% + 2px);
+        width: calc(50%);
       }
     }
 
@@ -119,7 +132,7 @@
     }
 
     &.root {
-
+      cursor: unset;
       @include hide-before();
 
       >.chart-item:first-child {
@@ -128,6 +141,17 @@
         &::before {
           content: none;
         }
+      }
+    }
+
+    &.collapsed {
+      >.chart-item {
+        @include hide-after();
+      }
+
+      >.chart-children {
+        display: none !important;
+
       }
     }
 
@@ -144,35 +168,58 @@
     }
 
     &.last-branch {
+      align-items: flex-start;
+      padding-right: 10%;
+
+      &.chart-tree {
+        padding-left: 8px;
+
+        &:first-child {
+          &::before {
+            background-color: aquamarine;
+            width: calc(65% - 4px);
+          }
+        }
+
+        &:last-child {
+          &::before {
+            background-color: aquamarine;
+            width: calc(30% + 2px);
+
+          }
+        }
+      }
 
       >.chart-children {
         display: block;
-        padding-left: 80px;
+        padding-left: 20%;
 
         &::before {
           content: '';
-          left: 59px;
-          top: -20px;
+          left: 10%;
+          top: -40px;
           position: absolute;
-          height: calc(100% - 48px);
-          transform: translateX(-100%);
+          height: calc(100% - 28px);
+          transform: translateX(-4px);
 
           @include path();
+          border-color: blue;
           border-left: none;
         }
 
         >.chart-tree {
-          @include hide-before()
+          @include hide-before();
         }
 
         .chart-item {
           &::before {
             left: 0;
-            width: 20%;
-            transform: translateX(-100%);
+            width: 100%;
+            transform: translateX(calc(-5px - 10%));
             border-top: none;
             border-right: none;
-            @include hide-before();
+            border-color: red;
+            // @include hide-before();
           }
         }
 
@@ -181,7 +228,6 @@
           &::before {
             border-top: none;
             border-bottom: none;
-            background-color: aliceblue;
           }
         }
       }
@@ -190,6 +236,14 @@
         &::after {
           // height: 100%;
           left: 10%;
+        }
+
+        .button-add {
+          left: 50%;
+        }
+
+        .collapse-btn {
+          left: 10%
         }
       }
     }
@@ -207,16 +261,17 @@
         left: 0;
         width: 100%;
         border: 1px solid gray;
-        // @include path();
-        background-color: aqua;
+        @include path();
         border-top: none;
         transform: translateY(100%);
       }
+    }
 
+    &.only {
+      @include hide-before();
 
-      &.only {
-        background: pink;
-        @include hide-before();
+      .button-add {
+        left: 50%;
       }
     }
 

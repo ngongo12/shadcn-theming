@@ -27,7 +27,8 @@ const ChartNode = <T extends Base<T>>({
   parentId,
   hidePath,
 }: ChartNodeProps<T>) => {
-  const {dragData, onAddNewNode} = useOrgChartContext()
+  const {dragData, onAddNewNode, handleCollapse, collapseList} =
+    useOrgChartContext()
   const context = useContext(OrgChartContext)
   const {renderItem} = context ?? {}
   const {transform, transition, setNodeRef, isDragging, attributes, listeners} =
@@ -45,11 +46,14 @@ const ChartNode = <T extends Base<T>>({
     position: 'relative',
   }
   const childIsLeaf = checkChildLeft(item.children)
+  const isCollapse = collapseList.includes(item.id)
   return (
     <div
       className={`chart-tree ${level === 1 ? 'root' : ''} ${
         hidePath ? 'hide-path' : ''
-      } ${childIsLeaf ? 'last-branch' : ''}`}
+      } ${childIsLeaf ? 'last-branch' : ''} ${
+        isCollapse ? 'collapsed' : 'expanded'
+      }`}
       ref={setNodeRef}
       style={{...style}}
       {...listeners}
@@ -58,13 +62,18 @@ const ChartNode = <T extends Base<T>>({
       <div className={`chart-item ${item.children ? '' : 'not-child'} `}>
         {renderItem?.(item)}
         <div className="button-add" onClick={() => onAddNewNode(item.id)}>
-          Add
+          A
         </div>
+        {!!item.children?.length && (
+          <div className="collapse-btn" onClick={() => handleCollapse(item.id)}>
+            {isCollapse ? 'E' : 'C'}
+          </div>
+        )}
       </div>
       <div
         className={`chart-children ${isDragContainer ? 'show-path' : ''} ${
           childIsLeaf ? 'leaf' : ''
-        } ${item.children?.length === 1 ? 'only' : ''}`}>
+        } ${item.children?.length === 1 ? 'only' : ''} `}>
         <SortableContext
           items={(item?.children ?? []).map?.((e) => e.id?.toString())}
           strategy={
