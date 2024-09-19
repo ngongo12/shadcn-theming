@@ -18,10 +18,11 @@
   }
 
   .chart-item {
-    width: 180px;
-    height: 50px;
+    width: 146px;
+    height: 48px;
     border-radius: 4px;
     border: 1px solid pink;
+    background-color: #fff;
     @include path();
     border-style: solid;
     position: relative;
@@ -29,7 +30,6 @@
     &:hover {
       .button-add {
         display: block;
-        cursor: pointer;
       }
     }
 
@@ -122,7 +122,7 @@
 
     &:last-child {
       &::before {
-        width: calc(50%);
+        width: calc(50% + 2px);
       }
     }
 
@@ -132,7 +132,7 @@
     }
 
     &.root {
-      cursor: unset;
+
       @include hide-before();
 
       >.chart-item:first-child {
@@ -168,58 +168,35 @@
     }
 
     &.last-branch {
-      align-items: flex-start;
-      padding-right: 10%;
-
-      &.chart-tree {
-        padding-left: 8px;
-
-        &:first-child {
-          &::before {
-            background-color: aquamarine;
-            width: calc(65% - 4px);
-          }
-        }
-
-        &:last-child {
-          &::before {
-            background-color: aquamarine;
-            width: calc(30% + 2px);
-
-          }
-        }
-      }
 
       >.chart-children {
         display: block;
-        padding-left: 20%;
+        padding-left: 80px;
 
         &::before {
           content: '';
-          left: 10%;
-          top: -40px;
+          left: 60.5px;
+          top: -20px;
           position: absolute;
-          height: calc(100% - 28px);
-          transform: translateX(-4px);
+          height: calc(100% - 46px);
+          transform: translateX(-100%);
 
           @include path();
-          border-color: blue;
           border-left: none;
         }
 
         >.chart-tree {
-          @include hide-before();
+          @include hide-before()
         }
 
         .chart-item {
           &::before {
             left: 0;
-            width: 100%;
-            transform: translateX(calc(-5px - 10%));
+            width: calc(20% - 4px);
+            transform: translateX(-100%);
             border-top: none;
             border-right: none;
-            border-color: red;
-            // @include hide-before();
+            @include hide-before();
           }
         }
 
@@ -228,6 +205,7 @@
           &::before {
             border-top: none;
             border-bottom: none;
+            // background-color: aliceblue;
           }
         }
       }
@@ -237,13 +215,25 @@
           // height: 100%;
           left: 10%;
         }
+      }
 
-        .button-add {
-          left: 50%;
-        }
+      .button-add {
+        left: 50%;
+      }
 
-        .collapse-btn {
-          left: 10%
+      .collapse-btn {
+        left: 10%
+      }
+    }
+
+    &.dragging {
+      .chart-item {
+
+        background-color: #F2F4F8;
+        color: #F2F4F8;
+
+        .button {
+          display: none;
         }
       }
     }
@@ -260,18 +250,15 @@
         top: -23px;
         left: 0;
         width: 100%;
-        border: 1px solid gray;
+        // border: 1px solid gray;
         @include path();
         border-top: none;
         transform: translateY(100%);
       }
-    }
 
-    &.only {
-      @include hide-before();
 
-      .button-add {
-        left: 50%;
+      &.only {
+        @include hide-before();
       }
     }
 

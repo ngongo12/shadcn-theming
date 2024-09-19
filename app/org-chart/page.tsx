@@ -1,10 +1,13 @@
 'use client'
 
-import React from 'react'
+import React, {useRef} from 'react'
 
-import OrgChart from '@/shared-core/components/org-chart/org-chart'
+import OrgChart, {
+  OrgChartRef,
+} from '@/shared-core/components/org-chart/org-chart'
 
 const Page = () => {
+  const orgChartRef = useRef<OrgChartRef<any>>(null)
   const ds = {
     id: 'n1',
     name: 'Lao Lao',
@@ -39,7 +42,31 @@ const Page = () => {
     ],
   }
   return (
-    <OrgChart data={ds} renderItem={(item: any) => <div>{item.name}</div>} />
+    <OrgChart
+      data={ds}
+      ref={orgChartRef}
+      renderItem={(item: any, isEdit) =>
+        isEdit ? (
+          <div style={{display: 'flex'}}>
+            <input autoFocus style={{width: 100}} />
+            <button
+              onClick={() => {
+                orgChartRef.current?.onUpdateNode({name: 'New data'}, item.id)
+              }}>
+              S
+            </button>
+            <button
+              onClick={() => {
+                orgChartRef.current?.onDeleteNode(item.id)
+              }}>
+              C
+            </button>
+          </div>
+        ) : (
+          <div>{item.name}</div>
+        )
+      }
+    />
   )
 }
 

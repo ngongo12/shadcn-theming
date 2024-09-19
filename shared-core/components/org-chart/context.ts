@@ -4,7 +4,7 @@ import useOrgChart from './hook/useOrgChart'
 
 type IProps<T> = {
   useOrgChartContext: ReturnType<typeof useOrgChart>
-  renderItem: (item: T) => React.ReactNode
+  renderItem: (item: T, isEdit?: boolean) => React.ReactNode
 }
 
 export const OrgChartContext = createContext<IProps<any> | undefined>(undefined)

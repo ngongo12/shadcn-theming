@@ -27,7 +27,7 @@ const ChartNode = <T extends Base<T>>({
   parentId,
   hidePath,
 }: ChartNodeProps<T>) => {
-  const {dragData, onAddNewNode, handleCollapse, collapseList} =
+  const {dragData, onAddNewNode, handleCollapse, collapseList, editId} =
     useOrgChartContext()
   const context = useContext(OrgChartContext)
   const {renderItem} = context ?? {}
@@ -35,6 +35,7 @@ const ChartNode = <T extends Base<T>>({
     useSortable({
       id: item.id,
       data: {item, level, parentId},
+      disabled: !!editId,
     })
   const isDragContainer = dragData?.parentId === item?.id
 
@@ -53,19 +54,22 @@ const ChartNode = <T extends Base<T>>({
         hidePath ? 'hide-path' : ''
       } ${childIsLeaf ? 'last-branch' : ''} ${
         isCollapse ? 'collapsed' : 'expanded'
-      }`}
-      ref={setNodeRef}
+      } ${isDragging ? 'dragging' : ''}`}
       style={{...style}}
-      {...listeners}
-      {...attributes}
+      ref={setNodeRef}
       key={item.id}>
-      <div className={`chart-item ${item.children ? '' : 'not-child'} `}>
-        {renderItem?.(item)}
-        <div className="button-add" onClick={() => onAddNewNode(item.id)}>
-          A
-        </div>
-        {!!item.children?.length && (
-          <div className="collapse-btn" onClick={() => handleCollapse(item.id)}>
+      <div
+        {...listeners}
+        {...attributes}
+        className={`chart-item ${item.children ? '' : 'not-child'} `}>
+        {renderItem?.(item, item.id === editId)}
+        {!editId && (
+          <div className="button button-add" onClick={() => onAddNewNode(item.id)}>
+            A
+          </div>
+        )}
+        {!!item.children?.length && !editId && (
+          <div className="button collapse-btn" onClick={() => handleCollapse(item.id)}>
             {isCollapse ? 'E' : 'C'}
           </div>
         )}

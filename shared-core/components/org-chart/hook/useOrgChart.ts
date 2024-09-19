@@ -11,7 +11,9 @@ import {
 import {v4 as uuid} from 'uuid'
 
 import findTreeContainer from '../helper/findTreeContainer'
+import handleUpdateNode from '../helper/handeUpdateNode'
 import handleAddNode from '../helper/handleAddNode'
+import handleDeleteNode from '../helper/handleDeleteNode'
 import wrapOrgData from '../helper/wrapOrgData'
 
 interface Base<T> {
@@ -29,6 +31,7 @@ const useOrgChart = <T extends Base<T>>({data: _data}: {data: T}) => {
   const [dragItem, setDragItem] = useState<T>()
   const [collapseList, setCollapseList] = useState<string[]>([])
   const [data, setData] = useState<T>(_data)
+  const [editId, setEditId] = useState<string>()
   const [dragData, setDragData] = useState<{
     level?: number
     parentId?: string
@@ -84,9 +87,14 @@ const useOrgChart = <T extends Base<T>>({data: _data}: {data: T}) => {
   }
 
   const onAddNewNode = <T>(id: string, data?: T) => {
+    const newId = uuid()
     const newData: any = data ?? {
-      id: uuid(),
+      id: newId,
     }
+    if (collapseList.includes(id)) {
+      handleCollapse(id)
+    }
+    handleToggleEdit(newId)
     setData((prev) => handleAddNode(prev, newData, id))
   }
 
@@ -97,6 +105,28 @@ const useOrgChart = <T extends Base<T>>({data: _data}: {data: T}) => {
         return prev.filter((item) => item !== id)
       } else return prev.concat([id])
     })
+  }
+
+  const handleToggleEdit = (id: string) => {
+    setEditId(id)
+  }
+
+  const onUpdateNode = <T>(updateData: T, id?: string) => {
+    if (id || editId) {
+      setEditId(undefined)
+      setData((prev) =>
+        handleUpdateNode(prev, updateData as any, id ?? editId ?? ''),
+      )
+    }
+  }
+
+  const onDeleteNode = (id?: string) => {
+    if (id) {
+      if (id === editId) {
+        setEditId(undefined)
+      }
+      setData((prev) => handleDeleteNode(prev, id))
+    }
   }
 
   return {
@@ -110,6 +140,10 @@ const useOrgChart = <T extends Base<T>>({data: _data}: {data: T}) => {
     onAddNewNode,
     collapseList,
     handleCollapse,
+    editId,
+    handleToggleEdit,
+    onUpdateNode,
+    onDeleteNode,
   }
 }
 

@@ -12,11 +12,15 @@ interface Base<T> {
 }
 interface OrgChardProps<T extends Base<T>> {
   data: T
-  renderItem: (item: T) => React.ReactNode
+  renderItem: (item: T, isEdit?: boolean) => React.ReactNode
+  onEditSave?: (data: T) => void
 }
 
-interface OrgChartRef<T> {
+export interface OrgChartRef<T> {
   data: T
+  onUpdateNode: (updateData: T, id?: string) => void
+  onDeleteNode: (id?: string) => void
+  editId?: string
 }
 
 const OrgChart = forwardRef(
@@ -29,6 +33,9 @@ const OrgChart = forwardRef(
     })
     useImperativeHandle(ref, () => ({
       data,
+      onUpdateNode: useOrgChartContext.onUpdateNode,
+      onDeleteNode: useOrgChartContext.onDeleteNode,
+      editId: useOrgChartContext.editId,
     }))
     const {sensors, onDragMove, onDragStart, onDragEnd, dragItem, data} =
       useOrgChartContext
