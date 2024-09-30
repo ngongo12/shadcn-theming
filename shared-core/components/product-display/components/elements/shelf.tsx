@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {Group, Rect} from 'react-konva'
 
 import useProductDisplay from '../../context/useProductDisplay'
@@ -11,7 +11,7 @@ import Product from './product'
 const Shelf = ({data}: ShelfProps) => {
   const {x, y, width, height, maxMerch = 0} = data
   const {shelfRef, onShelfDrop} = useShelf(data)
-  const {displayItems, dragItem} = useProductDisplay()
+  const {displayItems} = useProductDisplay()
   const {onDragEnd, onDragStart} = useDragging({
     dataItem: {
       type: 'shelf',
@@ -26,10 +26,8 @@ const Shelf = ({data}: ShelfProps) => {
       (item) => item.type === 'product' && item.data.parentId === data.id,
     )
     ?.map((item) => item.data)
-  useEffect(() => {
-    console.log('>>>>>>>>> shelf', data, dragItem)
-  }, [JSON.stringify(dragItem)])
-  const showMaxMerch = dragItem?.type === 'product'
+
+  const showMaxMerch = true
   return (
     <Group
       x={x}

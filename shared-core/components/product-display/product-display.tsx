@@ -30,7 +30,6 @@ const ProductDisplay = () => {
     {type: 'shelf', data: shelfData},
     {type: 'product', data: productData},
   ])
-  const dragItemState = useState<DisplayItemData>()
   useEffect(() => {
     console.log('>>>>>> change')
     setDisplayItems((prev) => prev)
@@ -145,7 +144,6 @@ const ProductDisplay = () => {
               React.SetStateAction<DisplayItemData[] | undefined>
             >,
           ],
-          dragItemState,
           tempItemRef,
           startPositionRef,
         }}>
