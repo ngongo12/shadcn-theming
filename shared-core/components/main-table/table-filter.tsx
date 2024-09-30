@@ -24,7 +24,7 @@ const TableFilter = ({useFilter}: TableFilterProps) => {
     onSearch?.({})
   }
 
-  if (!options?.length) return
+  if (!options?.length) return null
   if (!form) return null
   return (
     <Form {...form}>

@@ -1,3 +1,5 @@
+'use client'
+
 import React, {useEffect, useRef, useState} from 'react'
 import {Flex} from 'antd'
 import {Layer, Stage, Text, useStrictMode} from 'react-konva'
