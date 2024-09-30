@@ -26,8 +26,8 @@ export const shelfData: ShelfData = {
   height: 10,
   depth: 200,
   maxMerch: 100,
-  x: 50,
-  y: 200,
+  x: 150,
+  y: 50,
 }
 
 export const productData: ProductData = {
