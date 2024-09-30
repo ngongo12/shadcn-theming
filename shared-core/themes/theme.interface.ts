@@ -5,4 +5,3 @@ export interface ITheme {
 export interface IMappedTheme {
   [key: string]: string
 }
-

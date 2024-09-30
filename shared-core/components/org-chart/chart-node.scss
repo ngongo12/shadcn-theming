@@ -1,0 +1,266 @@
+.org-chart-container {
+
+  @mixin path {
+    border: 1px dotted silver;
+
+  }
+
+  @mixin hide-before {
+    &::before {
+      content: none
+    }
+  }
+
+  @mixin hide-after {
+    &::after {
+      content: none
+    }
+  }
+
+  .chart-item {
+    width: 146px;
+    height: 48px;
+    border-radius: 4px;
+    border: 1px solid pink;
+    background-color: #fff;
+    @include path();
+    border-style: solid;
+    position: relative;
+
+    &:hover {
+      .button-add {
+        display: block;
+      }
+    }
+
+    .button-add {
+      position: absolute;
+      cursor: pointer;
+      bottom: 0;
+      left: 80%;
+      transform: translate(-50%, 50%);
+      display: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      height: 20px;
+      border: 1px solid blue;
+      @include path();
+
+      border-left: none;
+      border-bottom: none;
+      transform: translateY(100%);
+    }
+
+    .collapse-btn {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateY(50%) translateX(-50%);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      height: 22px;
+      border: 1px solid green;
+      @include path();
+
+      border-left: none;
+      transform: translateY(-100%);
+    }
+
+    &.not-child {
+      @include hide-after();
+
+      .button-add {
+        left: 50%;
+      }
+
+      // &::after {
+      //   content: none
+      // }
+    }
+
+    &.hide-relationship {
+      @include hide-before();
+      @include hide-after();
+      // &::after,
+      // &::before {
+      //   content: none
+      // }
+    }
+  }
+
+  .chart-tree {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    position: relative;
+    padding: 0 4px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -22px;
+      left: -1px;
+      width: 100%;
+      border: 1px solid gray;
+      @include path();
+
+      border-bottom: none;
+
+      transform: translateY(100%);
+    }
+
+    &:last-child {
+      &::before {
+        width: calc(50% + 2px);
+      }
+    }
+
+    &.hide-path {
+      @include hide-before();
+
+    }
+
+    &.root {
+
+      @include hide-before();
+
+      >.chart-item:first-child {
+        @include hide-before();
+
+        &::before {
+          content: none;
+        }
+      }
+    }
+
+    &.collapsed {
+      >.chart-item {
+        @include hide-after();
+      }
+
+      >.chart-children {
+        display: none !important;
+
+      }
+    }
+
+    &:first-child {
+      &::before {
+        width: calc(50%);
+        right: 0;
+        left: unset
+      }
+    }
+
+    &:only-child {
+      @include hide-before();
+    }
+
+    &.last-branch {
+
+      >.chart-children {
+        display: block;
+        padding-left: 80px;
+
+        &::before {
+          content: '';
+          left: 60.5px;
+          top: -20px;
+          position: absolute;
+          height: calc(100% - 46px);
+          transform: translateX(-100%);
+
+          @include path();
+          border-left: none;
+        }
+
+        >.chart-tree {
+          @include hide-before()
+        }
+
+        .chart-item {
+          &::before {
+            left: 0;
+            width: calc(20% - 4px);
+            transform: translateX(-100%);
+            border-top: none;
+            border-right: none;
+            @include hide-before();
+          }
+        }
+
+        &.show-path {
+
+          &::before {
+            border-top: none;
+            border-bottom: none;
+            // background-color: aliceblue;
+          }
+        }
+      }
+
+      >.chart-item {
+        &::after {
+          // height: 100%;
+          left: 10%;
+        }
+      }
+
+      .button-add {
+        left: 50%;
+      }
+
+      .collapse-btn {
+        left: 10%
+      }
+    }
+
+    &.dragging {
+      .chart-item {
+
+        background-color: #F2F4F8;
+        color: #F2F4F8;
+
+        .button {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .chart-children {
+    display: flex;
+    position: relative;
+
+    &.show-path {
+      &::before {
+        content: '';
+        position: absolute;
+        top: -23px;
+        left: 0;
+        width: 100%;
+        // border: 1px solid gray;
+        @include path();
+        border-top: none;
+        transform: translateY(100%);
+      }
+
+
+      &.only {
+        @include hide-before();
+      }
+    }
+
+  }
+}
