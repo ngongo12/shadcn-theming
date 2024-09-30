@@ -3,7 +3,6 @@ import {Metadata, Viewport} from 'next'
 import CoreProvider from '@/shared-core/provider/core-provider'
 
 import {siteConfig} from '@/shared-core/config/site'
-import {SiteHeader} from '@/shared-core/components/site-header'
 import {TailwindIndicator} from '@/shared-core/components/tailwind-indicator'
 
 export const metadata: Metadata = {
@@ -32,7 +31,7 @@ export default function RootLayout({children}: RootLayoutProps) {
     <>
       <CoreProvider>
         <div className="relative flex min-h-screen flex-col">
-          <SiteHeader />
+          {/* <SiteHeader /> */}
           <div className="flex-1 overflow-x-hidden">{children}</div>
         </div>
         <TailwindIndicator />

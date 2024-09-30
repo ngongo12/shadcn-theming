@@ -1,0 +1,1 @@
+export const SEGMENT_FOOTER_COLOR = '#A3A4AD'
