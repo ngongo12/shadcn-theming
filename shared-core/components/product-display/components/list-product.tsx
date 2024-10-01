@@ -7,7 +7,7 @@ import {productList} from '../fakeData'
 import {Product} from './model/model'
 
 const ListProduct = () => {
-  const {tempItemRef, startPositionRef, setDragItem} = useProductDisplay()
+  const {tempItemRef, startPositionRef} = useProductDisplay()
   const [_, setDraggingItem] = useState<Product>()
   return (
     <Card
@@ -43,10 +43,6 @@ const ListProduct = () => {
                     height: item.size?.height as number,
                     id: uuid(),
                   }
-                  setDragItem({
-                    type: 'product',
-                    data,
-                  })
                   tempItemRef.current = {
                     type: 'product',
                     data,
@@ -61,7 +57,6 @@ const ListProduct = () => {
                 }}
                 onDragEnd={() => {
                   setDraggingItem(undefined)
-                  setDragItem(undefined)
                 }}
               />
               <Typography.Text>{item.name}</Typography.Text>
